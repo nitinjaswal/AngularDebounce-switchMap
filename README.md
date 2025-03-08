@@ -1,59 +1,22 @@
-# AngularDebouncing
+# AngularDebouncing and SwitchMap
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
+This project was generated using Angular CLI version 19.2.1.
 
-## Development server
+# switchMap
+1. User starts typing -> valueChanges emits a new value
+2. debounceTime(500) -> RxJS operator that delays the emission of an item from the source observable. In this case wait for 500ms before calling API
+3. switchMap -> It cancels previous request and ensure only the latest request is processed. Previous API calls gets canceled when the user types in new search query. In switchMap only latest emission matters
 
-To start a local development server, run:
 
-```bash
-ng serve
-```
+# concatMap
+1. concatMap -> It takses value from the source observable and trandforms each value into an inner observable, and then susbscribes to these inner observables one at a time
+2. It is useful when we have series of HTTP requests that must be executed in a particualar order
+3. Unlike switchMap, which cancels previous observables when a new value arrives, concatMap allows all inner observables to complete.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+# concatMap use cases
+1. Ordered HTTP requests: When you need to make multiple API calls in a specific sequence, such as when one API call depends on the result of the previous one
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# Problem with manual ordering in subscribe
+1. Nested subscribe calls(callback hell)
+2. Error handling is more complex
+3. Readability and Maintainability issue
